@@ -53,7 +53,8 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
             return CreatedAtAction(nameof(GetBrand), new { id = brand.ID }, brand);
         }
 
-        [HttpPut("{id}")]
+        // Edit Data By ID
+        [HttpPut]
         public async Task<ActionResult> PutBrand(int id, Brand brand)
         {
             if(id != brand.ID)
@@ -82,6 +83,27 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
         private bool BrandAvailable(int id)
         {
             return (_dbContext.Brands?.Any(x => x.ID == id)).GetValueOrDefault();
+        }
+
+        // Delete Data By ID
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteBrand(int id)
+        {
+            if(_dbContext.Brands == null)
+            {
+                return NotFound();
+            }
+            var brand = await _dbContext.Brands.FindAsync(id);
+            if (brand == null)
+            {
+                return NotFound();
+            }
+
+            _dbContext.Brands.Remove(brand);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
     }
