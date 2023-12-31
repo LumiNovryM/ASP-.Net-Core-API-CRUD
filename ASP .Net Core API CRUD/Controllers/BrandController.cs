@@ -16,8 +16,9 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
             _dbContext = dbContext;
         }
 
+        // Get All Data
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Brand>>> GetBrands()
+        public async Task<ActionResult<IEnumerable<Brand>>> GetBrand()
         {
             if (_dbContext.Brands == null)
             {
@@ -26,19 +27,30 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
             return await _dbContext.Brands.ToListAsync();
         }
 
+        // Get Data By ID
         [HttpGet]
-        public async Task<ActionResult<Brand>> GetBrandsBy(int id)
+        public async Task<ActionResult<Brand>> GetBrandBy(int id)
         {
             if (_dbContext.Brands == null)
             {
                 return NotFound();
             }
             var brand = await _dbContext.Brands.FindAsync(id);
-            if(brand == null)
+            if (brand == null)
             {
                 return NotFound();
             }
             return brand;
+        }
+
+        // Create New Data
+        [HttpPost]
+        public async Task<ActionResult<Brand>> PostBrand(Brand brand)
+        {
+            _dbContext.Brands.Add(brand);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetBrand), new { id = brand.ID }, brand);
         }
     }
 }
