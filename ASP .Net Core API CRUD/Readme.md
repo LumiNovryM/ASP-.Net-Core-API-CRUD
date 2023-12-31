@@ -2,5 +2,7 @@
 
 ## Package 
  - Microsoft.EntityFrameworkCore
+ - Microsoft.EntityFrameworkCore.Tools
+ - Microsoft.EntityFrameworkCore.SqlServer
 
 
