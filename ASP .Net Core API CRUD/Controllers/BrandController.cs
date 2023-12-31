@@ -52,5 +52,37 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
 
             return CreatedAtAction(nameof(GetBrand), new { id = brand.ID }, brand);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutBrand(int id, Brand brand)
+        {
+            if(id != brand.ID)
+            {
+                return BadRequest();
+            }
+            _dbContext.Entry(brand).State = EntityState.Modified;
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                if(!BrandAvailable(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+        }
+
+        private bool BrandAvailable(int id)
+        {
+            return (_dbContext.Brands?.Any(x => x.ID == id)).GetValueOrDefault();
+        }
+
     }
 }
