@@ -28,7 +28,7 @@ namespace ASP_.Net_Core_API_CRUD.Controllers
         }
 
         // Get Data By ID
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Brand>> GetBrandBy(int id)
         {
             if (_dbContext.Brands == null)
